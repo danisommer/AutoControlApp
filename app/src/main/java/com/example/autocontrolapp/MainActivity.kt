@@ -3,21 +3,26 @@ package com.example.autocontrolapp
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.navigation.NavigationView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
+import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.appcompat.app.AppCompatActivity
 import com.example.autocontrolapp.databinding.ActivityMainBinding
+import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.navigation.NavigationView
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+    private lateinit var navController: NavController
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,49 +30,69 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
         setSupportActionBar(binding.appBarMain.toolbar)
 
-        binding.appBarMain.fab?.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null)
-                .setAnchorView(R.id.fab).show()
+        // Configuração do Navigation Component
+        val navHostFragment = supportFragmentManager
+            .findFragmentById(R.id.nav_host_fragment_content_main) as NavHostFragment
+        navController = navHostFragment.navController
+
+        // Define os destinos de nível superior (que mostram o drawer)
+        appBarConfiguration = AppBarConfiguration(
+            setOf(
+                R.id.nav_home, R.id.nav_categorias
+            ),
+            binding.drawerLayout
+        )
+        setupActionBarWithNavController(navController, appBarConfiguration)
+        binding.navView.setupWithNavController(navController)
+
+        // Configura o FAB para adicionar nova categoria quando estiver na tela de categorias
+        navController.addOnDestinationChangedListener { _, destination, _ ->
+            when (destination.id) {
+                R.id.nav_categorias -> {
+                    binding.appBarMain.fab?.apply {
+                        isVisible = true
+                        setOnClickListener {
+                            navController.navigate(R.id.action_nav_categorias_to_novaCategoriaFragment)
+                        }
+                    }
+                }
+                R.id.detalheMonitoriaFragment -> {
+                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                    binding.appBarMain.fab?.isVisible = false
+                }
+                R.id.detalheCategoriaFragment -> {
+                    binding.appBarMain.fab?.apply {
+                        isVisible = true
+                        setOnClickListener {
+                            // Obtém o ID da categoria atual do fragmento de destino
+                            val currentDestination = navController.currentBackStackEntry?.destination
+                            val categoriaId = currentDestination?.arguments?.getInt("categoriaId") ?: 0
+                            
+                            val action = DetalheCategoriaFragmentDirections
+                                .actionDetalheCategoriaFragmentToNovaMonitoriaFragment(categoriaId)
+                            navController.navigate(action)
+                        }
+                    }
+                }
+                else -> {
+                    binding.appBarMain.fab?.isVisible = false
+                }
+            }
         }
 
-        val navHostFragment =
-            (supportFragmentManager.findFragmentById(R.id.nav_host_fragment_content_main) as NavHostFragment?)!!
-        val navController = navHostFragment.navController
-
-        binding.navView?.let {
-            appBarConfiguration = AppBarConfiguration(
-                setOf(
-                    R.id.nav_transform, R.id.nav_reflow, R.id.nav_slideshow, R.id.nav_settings
-                ),
-                binding.drawerLayout
-            )
-            setupActionBarWithNavController(navController, appBarConfiguration)
-            it.setupWithNavController(navController)
-        }
-
-        binding.appBarMain.contentMain.bottomNavView?.let {
-            appBarConfiguration = AppBarConfiguration(
-                setOf(
-                    R.id.nav_transform, R.id.nav_reflow, R.id.nav_slideshow
-                )
-            )
-            setupActionBarWithNavController(navController, appBarConfiguration)
-            it.setupWithNavController(navController)
+        // Verifica se foi aberto a partir de uma notificação
+        intent.extras?.let { extras ->
+            if (extras.containsKey("categoria_id")) {
+                val categoriaId = extras.getInt("categoria_id")
+                val action = HomeFragmentDirections.actionNavHomeToDetalheCategoriaFragment(categoriaId)
+                navController.navigate(action)
+            }
         }
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        val result = super.onCreateOptionsMenu(menu)
-        // Using findViewById because NavigationView exists in different layout files
-        // between w600dp and w1240dp
-        val navView: NavigationView? = findViewById(R.id.nav_view)
-        if (navView == null) {
-            // The navigation drawer already has the items including the items in the overflow menu
-            // We only inflate the overflow menu if the navigation drawer isn't visible
-            menuInflater.inflate(R.menu.overflow, menu)
-        }
-        return result
+        menuInflater.inflate(R.menu.main, menu)
+        return true
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -81,7 +106,6 @@ class MainActivity : AppCompatActivity() {
     }
 
     override fun onSupportNavigateUp(): Boolean {
-        val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
 }
