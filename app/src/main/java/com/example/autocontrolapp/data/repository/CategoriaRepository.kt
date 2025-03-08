@@ -44,4 +44,8 @@ class CategoriaRepository(
             proximaVerificacao = proximaVerificacao
         )
     }
+
+    fun obterCategoriasParaVerificacaoHoje(hoje: Date): Any {
+
+    }
 }
