@@ -23,5 +23,6 @@ data class Subtopico(
     val categoriaId: Long,
     val nome: String,
     val descricao: String,
-    val tipoDado: TipoDado
+    val tipoDado: TipoDado,          // Tipo esperado (BOOLEANO, TEXTO, NUMERO, LISTA)
+    val opcoes: List<String>? = null   // Lista de opções (usado quando tipoDado == LISTA)
 )

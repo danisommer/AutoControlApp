@@ -10,7 +10,7 @@ data class Categoria(
     val id: Long = 0,
     val nome: String,
     val descricao: String,
-    val periodicidade: Int, // em dias
-    val ultimaVerificacao: Date?,
-    val proximaVerificacao: Date?
+    val periodicidade: Int,       // Em dias
+    val ultimaVerificacao: Date?, // Data/hora da última verificação
+    val proximaVerificacao: Date? // Data/hora da próxima verificação
 )

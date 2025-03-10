@@ -54,4 +54,5 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     implementation("androidx.work:work-runtime-ktx:2.8.1")
+    implementation("com.google.code.gson:gson:2.8.8")
 }

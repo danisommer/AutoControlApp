@@ -2,30 +2,24 @@ package com.example.autocontrolapp.data.repository
 
 import com.example.autocontrolapp.data.database.dao.SubtopicoDao
 import com.example.autocontrolapp.data.database.entity.Subtopico
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
-class SubtopicoRepository(
-    private val subtopicoDao: SubtopicoDao
-) {
-    fun obterTodosSubtopicos() = subtopicoDao.getAll()
+class SubtopicoRepository(private val subtopicoDao: SubtopicoDao) {
 
-    suspend fun obterSubtopicoPorId(id: Long) = subtopicoDao.getById(id)
-    
-    suspend fun obterSubtopicosPorCategoria(categoriaId: Long) = 
-        subtopicoDao.getByCategoria(categoriaId)
-
-    suspend fun adicionarSubtopico(subtopico: Subtopico): Long {
-        return subtopicoDao.insert(subtopico)
+    suspend fun insertSubtopico(subtopico: Subtopico): Long = withContext(Dispatchers.IO) {
+        subtopicoDao.insert(subtopico)
     }
 
-    suspend fun atualizarSubtopico(subtopico: Subtopico) {
+    suspend fun updateSubtopico(subtopico: Subtopico) = withContext(Dispatchers.IO) {
         subtopicoDao.update(subtopico)
     }
 
-    suspend fun excluirSubtopico(subtopico: Subtopico) {
+    suspend fun deleteSubtopico(subtopico: Subtopico) = withContext(Dispatchers.IO) {
         subtopicoDao.delete(subtopico)
     }
-    
-    suspend fun marcarSubtopicoComoConcluido(id: Long, concluido: Boolean) {
-        subtopicoDao.atualizarStatus(id, concluido)
+
+    suspend fun getSubtopicosByCategoria(categoriaId: Long): List<Subtopico> = withContext(Dispatchers.IO) {
+        subtopicoDao.getSubtopicosByCategoria(categoriaId)
     }
 }

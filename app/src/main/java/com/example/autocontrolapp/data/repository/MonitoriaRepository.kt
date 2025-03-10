@@ -2,36 +2,28 @@ package com.example.autocontrolapp.data.repository
 
 import com.example.autocontrolapp.data.database.dao.MonitoriaDao
 import com.example.autocontrolapp.data.database.entity.Monitoria
-import java.util.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
-class MonitoriaRepository(
-    private val monitoriaDao: MonitoriaDao
-) {
-    fun obterTodasMonitorias() = monitoriaDao.getAll()
+class MonitoriaRepository(private val monitoriaDao: MonitoriaDao) {
 
-    suspend fun obterMonitoriaPorId(id: Long) = monitoriaDao.getById(id)
-    
-    suspend fun obterMonitoriasPorCategoria(categoriaId: Long) = 
-        monitoriaDao.getByCategoria(categoriaId)
-    
-    suspend fun obterMonitoriasPorData(data: Date) =
-        monitoriaDao.getByData(data)
-    
-    suspend fun obterMonitoriasRecentes(limite: Int = 10) = 
-        monitoriaDao.getRecentes(limite)
-
-    suspend fun adicionarMonitoria(monitoria: Monitoria): Long {
-        return monitoriaDao.insert(monitoria)
+    suspend fun insertMonitoria(monitoria: Monitoria): Long = withContext(Dispatchers.IO) {
+        monitoriaDao.insert(monitoria)
     }
 
-    suspend fun atualizarMonitoria(monitoria: Monitoria) {
+    suspend fun updateMonitoria(monitoria: Monitoria) = withContext(Dispatchers.IO) {
         monitoriaDao.update(monitoria)
     }
 
-    suspend fun excluirMonitoria(monitoria: Monitoria) {
+    suspend fun deleteMonitoria(monitoria: Monitoria) = withContext(Dispatchers.IO) {
         monitoriaDao.delete(monitoria)
     }
-    
-    suspend fun obterEstatisticasDeMonitorias(categoriaId: Long, periodoInicio: Date, periodoFim: Date) =
-        monitoriaDao.getEstatisticas(categoriaId, periodoInicio, periodoFim)
+
+    suspend fun getMonitoriasByCategoria(categoriaId: Long): List<Monitoria> = withContext(Dispatchers.IO) {
+        monitoriaDao.getMonitoriasByCategoria(categoriaId)
+    }
+
+    suspend fun getAllMonitorias(): List<Monitoria> = withContext(Dispatchers.IO) {
+        monitoriaDao.getAllMonitorias()
+    }
 }

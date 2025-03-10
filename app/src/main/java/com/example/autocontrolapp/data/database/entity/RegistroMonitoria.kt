@@ -8,15 +8,26 @@ import androidx.room.PrimaryKey
 @Entity(
     tableName = "registro_monitoria",
     foreignKeys = [
-        ForeignKey(entity = Monitoria::class, parentColumns = ["id"], childColumns = ["monitoriaId"], onDelete = ForeignKey.CASCADE),
-        ForeignKey(entity = Subtopico::class, parentColumns = ["id"], childColumns = ["subtopicoId"], onDelete = ForeignKey.CASCADE)
+        ForeignKey(
+            entity = Monitoria::class,
+            parentColumns = ["id"],
+            childColumns = ["monitoriaId"],
+            onDelete = ForeignKey.CASCADE
+        ),
+        ForeignKey(
+            entity = Subtopico::class,
+            parentColumns = ["id"],
+            childColumns = ["subtopicoId"],
+            onDelete = ForeignKey.CASCADE
+        )
     ],
     indices = [Index("monitoriaId"), Index("subtopicoId")]
 )
 data class RegistroMonitoria(
     @PrimaryKey(autoGenerate = true)
     val id: Long = 0,
-    val monitoriaId: Long, // Ligado à vistoria
-    val subtopicoId: Long, // O subtópico avaliado
-    val resposta: String // Resposta do tipo de dado correspondente
+    val monitoriaId: Long,
+    val subtopicoId: Long,
+    val conforme: Boolean,    // Indica se o item está conforme
+    val valor: String? = null // Informação adicional (comentário, número ou opção selecionada)
 )
