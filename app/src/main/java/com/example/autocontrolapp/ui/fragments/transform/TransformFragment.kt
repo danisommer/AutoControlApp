@@ -1,4 +1,4 @@
-package com.example.autocontrolapp.viewmodel.transform
+package com.example.autocontrolapp.ui.fragments.transform
 
 import android.os.Bundle
 import android.view.LayoutInflater

@@ -1,4 +1,4 @@
-package com.example.autocontrolapp.ui.settings
+package com.example.autocontrolapp.ui.fragments.settings
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.autocontrolapp.databinding.FragmentSettingsBinding
+import com.example.autocontrolapp.viewmodel.SettingsViewModel
 
 class SettingsFragment : Fragment() {
 

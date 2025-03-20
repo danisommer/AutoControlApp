@@ -1,4 +1,4 @@
-package com.example.autocontrolapp.ui.reflow
+package com.example.autocontrolapp.ui.fragments.reflow
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.autocontrolapp.databinding.FragmentReflowBinding
+import com.example.autocontrolapp.viewmodel.ReflowViewModel
 
 class ReflowFragment : Fragment() {
 

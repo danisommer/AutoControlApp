@@ -26,27 +26,42 @@ object AppModule {
     }
 
     @Provides
+    @Singleton
     fun provideCategoriaDao(db: AppDatabase): CategoriaDao = db.categoriaDao()
 
     @Provides
+    @Singleton
     fun provideSubtopicoDao(db: AppDatabase): SubtopicoDao = db.subtopicoDao()
 
     @Provides
+    @Singleton
     fun provideMonitoriaDao(db: AppDatabase): MonitoriaDao = db.monitoriaDao()
 
     @Provides
+    @Singleton
     fun provideRegistroMonitoriaDao(db: AppDatabase): RegistroMonitoriaDao = db.registroMonitoriaDao()
 
     @Provides
-    fun provideCategoriaRepository(dao: CategoriaDao): CategoriaRepository = CategoriaRepository(dao)
+    @Singleton
+    fun provideCategoriaRepository(categoriaDao: CategoriaDao): CategoriaRepository {
+        return CategoriaRepository(categoriaDao)
+    }
 
     @Provides
-    fun provideSubtopicoRepository(dao: SubtopicoDao): SubtopicoRepository = SubtopicoRepository(dao)
+    @Singleton
+    fun provideSubtopicoRepository(subtopicoDao: SubtopicoDao): SubtopicoRepository {
+        return SubtopicoRepository(subtopicoDao)
+    }
 
     @Provides
-    fun provideMonitoriaRepository(dao: MonitoriaDao): MonitoriaRepository = MonitoriaRepository(dao)
+    @Singleton
+    fun provideMonitoriaRepository(monitoriaDao: MonitoriaDao): MonitoriaRepository {
+        return MonitoriaRepository(monitoriaDao)
+    }
 
     @Provides
-    fun provideRegistroMonitoriaRepository(dao: RegistroMonitoriaDao): RegistroMonitoriaRepository =
-        RegistroMonitoriaRepository(dao)
+    @Singleton
+    fun provideRegistroMonitoriaRepository(registroMonitoriaDao: RegistroMonitoriaDao): RegistroMonitoriaRepository {
+        return RegistroMonitoriaRepository(registroMonitoriaDao)
+    }
 }

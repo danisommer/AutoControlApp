@@ -1,4 +1,4 @@
-package com.example.autocontrolapp.ui.slideshow
+package com.example.autocontrolapp.ui.fragments.slideshow
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.autocontrolapp.databinding.FragmentSlideshowBinding
+import com.example.autocontrolapp.viewmodel.SlideshowViewModel
 
 class SlideshowFragment : Fragment() {
 

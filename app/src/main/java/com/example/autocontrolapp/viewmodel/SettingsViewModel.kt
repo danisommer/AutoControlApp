@@ -1,4 +1,4 @@
-package com.example.autocontrolapp.ui.settings
+package com.example.autocontrolapp.viewmodel
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
